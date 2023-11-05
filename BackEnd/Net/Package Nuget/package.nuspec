@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>myapp-tools</id>
+    <version>1.0.0.0</version>
+    <title>myapp-tools.Nuget</title>
+    <authors>Authors Names</authors>
+    <owners>Owners Names</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Utilities for project MyApp.</description>
+    <copyright>Company - 2020</copyright>
+  </metadata>
+  <files>
+	<file src="tools\Fpaenc.dll" target="tools" />
+	<file src="tools\JvrLog.dll" target="tools" />
+	<file src="tools\Encript.dll" target="tools" />
+	<file src="tools\TRexec.exe" target="tools" />
+  </files>
+</package>
