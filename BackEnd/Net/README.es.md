@@ -90,14 +90,14 @@ public HttpResponseMessage Test()
 //Byte order mark or BOM
 public static string RemoveBom(this string value) 
 {
-    try
-    {
-        return Regex.Replace(value, @"[\uFEFF]+g", string.Empty, RegexOptions.None, TimeSpan.FromSeconds(1.5));
-    }
-    catch (RegexMatchTimeoutException)
-    {
-        throw new Exception("The Regex timeout");
-    }
+	try
+	{
+		return Regex.Replace(value, @"[\uFEFF]+g", string.Empty, RegexOptions.None, TimeSpan.FromSeconds(1.5));
+	}
+	catch (RegexMatchTimeoutException)
+	{
+		throw new Exception("The Regex timeout");
+	}
 }
 ```
 Referencias:
@@ -149,15 +149,15 @@ public class Program
 	}
 	
 	public static int ConvertListEnumToIntWithBinary<T>(List<T> listEnum)
-    {
-        if (!typeof(T).IsEnum) throw new Exception("ConvertListEnumToIntWithBinary: T is not enum");
+	{
+		if (!typeof(T).IsEnum) throw new Exception("ConvertListEnumToIntWithBinary: T is not enum");
 
-        var result = 0;
-        foreach (var l in listEnum) {
-           result |= 1 << Convert.ToInt32(l);
-        }
-        return result;
-    }
+		var result = 0;
+		foreach (var l in listEnum) {
+			result |= 1 << Convert.ToInt32(l);
+		}
+		return result;
+	}
 
 	public static List<T> ConvertIntToListEnumWithBinary<T>(int intListEnum)
 	{
@@ -195,20 +195,20 @@ public class Program
 	public static void Main()
 	{
 		var numbers = new List<double>(){ 
-            1.034923, 
-            2.0,
-            3.141615478, 
-            4,
-            5.000000000001,
-        };
-		
-        foreach (var number in numbers) {
-            var remainder = number % 1;
-            if (remainder != 0) 
-                Console.WriteLine(number + " no es entero.");
-            else
-                Console.WriteLine(number + " es entero.");
-        }
+			1.034923, 
+			2.0,
+			3.141615478, 
+			4,
+			5.000000000001,
+		};
+
+		foreach (var number in numbers) {
+			var remainder = number % 1;
+			if (remainder != 0) 
+				Console.WriteLine(number + " no es entero.");
+			else
+				Console.WriteLine(number + " es entero.");
+		}
 	}
 }
 ```
@@ -256,13 +256,13 @@ bool isServiceUp = true;
 
 try
 {
-    // El address se debería obtener del client.config, de manera que se consume el servicio del ambiente.
+	// El address se debería obtener del client.config, de manera que se consume el servicio del ambiente.
 	var address = "http://xxxxxx:2100/WCFMyCompanyServiceHost/IXXXXXXService.svc";
-    var mexClient = new MetadataExchangeClient(new Uri(address), MetadataExchangeClientMode.HttpGet);
-    mexClient.GetMetadata();
+	var mexClient = new MetadataExchangeClient(new Uri(address), MetadataExchangeClientMode.HttpGet);
+	mexClient.GetMetadata();
 }
 catch (Exception ex)
 {
-    isServiceUp = false;
+	isServiceUp = false;
 } 
 ```

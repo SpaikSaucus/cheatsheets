@@ -89,14 +89,14 @@ public HttpResponseMessage Test()
 //Byte order mark or BOM
 public static string RemoveBom(this string value) 
 {
-    try
-    {
-        return Regex.Replace(value, @"[\uFEFF]+g", string.Empty, RegexOptions.None, TimeSpan.FromSeconds(1.5));
-    }
-    catch (RegexMatchTimeoutException)
-    {
-        throw new Exception("The Regex timeout");
-    }
+	try
+	{
+		return Regex.Replace(value, @"[\uFEFF]+g", string.Empty, RegexOptions.None, TimeSpan.FromSeconds(1.5));
+	}
+	catch (RegexMatchTimeoutException)
+	{
+		throw new Exception("The Regex timeout");
+	}
 }
 ```
 References:
@@ -146,17 +146,17 @@ public class Program
 			Console.WriteLine(loginT.ToString());
 		}
 	}
-	
-	public static int ConvertListEnumToIntWithBinary<T>(List<T> listEnum)
-    {
-        if (!typeof(T).IsEnum) throw new Exception("ConvertListEnumToIntWithBinary: T is not enum");
 
-        var result = 0;
-        foreach (var l in listEnum) {
-           result |= 1 << Convert.ToInt32(l);
-        }
-        return result;
-    }
+	public static int ConvertListEnumToIntWithBinary<T>(List<T> listEnum)
+	{
+		if (!typeof(T).IsEnum) throw new Exception("ConvertListEnumToIntWithBinary: T is not enum");
+
+		var result = 0;
+		foreach (var l in listEnum) {
+			result |= 1 << Convert.ToInt32(l);
+		}
+		return result;
+	}
 
 	public static List<T> ConvertIntToListEnumWithBinary<T>(int intListEnum)
 	{
@@ -194,20 +194,20 @@ public class Program
 	public static void Main()
 	{
 		var numbers = new List<double>(){ 
-            1.034923, 
-            2.0,
-            3.141615478, 
-            4,
-            5.000000000001,
-        };
-		
-        foreach (var number in numbers) {
-            var remainder = number % 1;
-            if (remainder != 0) 
-                Console.WriteLine(number + " is not integer.");
-            else
-                Console.WriteLine(number + " is integer.");
-        }
+			1.034923, 
+			2.0,
+			3.141615478, 
+			4,
+			5.000000000001,
+		};
+
+		foreach (var number in numbers) {
+			var remainder = number % 1;
+			if (remainder != 0) 
+				Console.WriteLine(number + " is not integer.");
+			else
+				Console.WriteLine(number + " is integer.");
+		}
 	}
 }
 ```
@@ -256,13 +256,13 @@ bool isServiceUp = true;
 
 try
 {
-    // The address should be obtained from client.config so that the environment service is consumed.
+	// The address should be obtained from client.config so that the environment service is consumed.
 	var address = "http://xxxxxx:2100/WCFMyCompanyServiceHost/IXXXXXXService.svc";
-    var mexClient = new MetadataExchangeClient(new Uri(address), MetadataExchangeClientMode.HttpGet);
-    mexClient.GetMetadata();
+	var mexClient = new MetadataExchangeClient(new Uri(address), MetadataExchangeClientMode.HttpGet);
+	mexClient.GetMetadata();
 }
 catch (Exception ex)
 {
-    isServiceUp = false;
+	isServiceUp = false;
 } 
 ```
