@@ -21,19 +21,22 @@ I have a simple webAPI build by Visual Studio 2013. It works well when I run it 
 HTTP Error 500.19 - Internal Server Error The requested page cannot be accessed because the related configuration data for the page is invalid.
 
 Detailed Error Information:
-Module IIS Web Core
+
+    Module IIS Web Core
     Notification BeginRequest
     Handler Not yet determined
     Error Code 0x80070021
     Config Error This configuration section cannot be used at this path. This happens when the section is locked at a parent level. 
-        Locking is either by default (overrideModeDefault="Deny"), or set explicitly by a location tag with overrideMode="Deny" or the legacy allowOverride="false".
+    Locking is either by default (overrideModeDefault="Deny"), or set explicitly by a location tag with overrideMode="Deny" or the legacy allowOverride="false".
     Config File \?\C:\inetpub\wwwroot\APITeslin\web.config
     
 Config Source:
 
+```xml
 36:   <system.webServer>  
 37:     <handlers>  
 38:       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+```
 
 ### SOLUTION
 Windows Server 2012, IIS 8.5. Should work for other versions too.
@@ -129,7 +132,7 @@ public class Program
 {
 	public static void Main()
 	{
-		var lst = new List<LoginType>();		
+		var lst = new List<LoginType>();
 		lst.Add(LoginType.Auth0);
 		lst.Add(LoginType.Google);
 		lst.Add(LoginType.Facebook);
@@ -139,7 +142,7 @@ public class Program
 		Console.WriteLine(result.ToString());
 		
 		var result2 = ConvertIntToListEnumWithBinary<LoginType>(result);
-		foreach(var loginT in result2){
+		foreach(var loginT in result2) {
 			Console.WriteLine(loginT.ToString());
 		}
 	}
@@ -185,7 +188,7 @@ public class Program
 ```csharp
 using System;
 using System.Collections.Generic;
-					
+
 public class Program
 {
 	public static void Main()
@@ -219,11 +222,11 @@ Using CMD console in the following path:
     * Microsoft Visual Studio :arrow_right: 2022 :arrow_right: Community :arrow_right: MSBuild :arrow_right: Current :arrow_right: Bin
 
 Command:
-	MSBuild MyApp.sln /t:Rebuild /p:Configuration=Release
-    MSBuild MyApp.csproj /t:Clean /p:Configuration=Debug;TargetFrameworkVersion=v3.5
+* _MSBuild MyApp.sln /t:Rebuild /p:Configuration=Release_
+* _MSBuild MyApp.csproj /t:Clean /p:Configuration=Debug;TargetFrameworkVersion=v3.5_
 
 Example:
-* C:\..\..>MSBuild.exe MyApp.Api.sln -t:rebuild
+* _C:\..\..>MSBuild.exe MyApp.Api.sln -t:rebuild_
 
 
 ## Check installed .Net Framework version
@@ -236,9 +239,10 @@ Once in the directory with the latest version number, execute command:
 * .\MSBuild.exe -version
 
 The above command will output the latest installed version in the following format:
-* C:\Windows\Microsoft.NET\Framework\v4.0.30319>.\MSBuild.exe -version
+* _C:\Windows\Microsoft.NET\Framework\v4.0.30319>.\MSBuild.exe -version_
 
 When the command is entered, the following information will appear:
+
     Microsoft (R) Build Engine version 4.6.1038.0
     [Microsoft .NET Framework, version 4.0.30319.42000]
     Copyright (C) Microsoft Corporation. All rights reserved.

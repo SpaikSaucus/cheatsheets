@@ -21,22 +21,23 @@ Tengo una versión webAPI simple de Visual Studio 2013. Funciona bien cuando la 
 HTTP Error 500.19 - Error interno del servidor No se puede acceder a la página solicitada porque los datos de configuración relacionados para la página no son válidos.
 
 Información de error detallada:
+
     Módulo IIS Web Core
     Notificación BeginRequest
     Handler Aún no determinado
     Código de error 0x80070021
     Error de configuración Esta sección de configuración no se puede usar en esta ruta. Esto sucede cuando la sección está bloqueada en un nivel principal. 
     El bloqueo se realiza de forma predeterminada (overrideModeDefault = "Deny"), 
-        o se establece explícitamente mediante una etiqueta de ubicación con overrideMode = "Deny" 
-        o la heredada allowOverride = "false".
+    o se establece explícitamente mediante una etiqueta de ubicación con overrideMode = "Deny" 
+    o la heredada allowOverride = "false".
     Archivo de configuración \?\C:\inetpub\wwwroot\APITeslin\web.config
 
 Fuente de configuración:
-
+```xml
 36:   <system.webServer>  
 37:     <handlers>  
 38:       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
-
+```
 
 ### SOLUCIÓN
 Windows Server 2012, IIS 8.5 . Debería funcionar para otras versiones también.
@@ -104,8 +105,6 @@ Referencias:
 * https://hexed.it/
 
 
-
-
 ## Convertir Selección Multiple a un valor entero
 
 Vamos a convertir la selección multiple de valores a un numero entero que pueda ser usada para luego con ese valor entero, poder obtener la selección realizada. Esto vamos a realizarlo con la utilización de binarios.
@@ -134,7 +133,7 @@ public class Program
 {
 	public static void Main()
 	{
-		var lst = new List<LoginType>();		
+		var lst = new List<LoginType>();
 		lst.Add(LoginType.Auth0);
 		lst.Add(LoginType.Google);
 		lst.Add(LoginType.Facebook);
@@ -144,7 +143,7 @@ public class Program
 		Console.WriteLine(result.ToString());
 		
 		var result2 = ConvertIntToListEnumWithBinary<LoginType>(result);
-		foreach(var loginT in result2){
+		foreach(var loginT in result2) {
 			Console.WriteLine(loginT.ToString());
 		}
 	}
@@ -190,7 +189,7 @@ public class Program
 ```csharp
 using System;
 using System.Collections.Generic;
-					
+
 public class Program
 {
 	public static void Main()
@@ -224,11 +223,11 @@ Usando la consola CMD en la siguiente ruta:
     * Microsoft Visual Studio :arrow_right: 2022 :arrow_right: Community :arrow_right: MSBuild :arrow_right: Current :arrow_right: Bin
 
 Comando:
-	MSBuild MyApp.sln /t:Rebuild /p:Configuration=Release
-    MSBuild MyApp.csproj /t:Clean /p:Configuration=Debug;TargetFrameworkVersion=v3.5
+* _MSBuild MyApp.sln /t:Rebuild /p:Configuration=Release_
+* _MSBuild MyApp.csproj /t:Clean /p:Configuration=Debug;TargetFrameworkVersion=v3.5_
 
 Ejemplo:
-* C:\..\..>MSBuild.exe MyApp.Api.sln -t:rebuild
+* _C:\..\..>MSBuild.exe MyApp.Api.sln -t:rebuild_
 
 ## Verificar versión .NetFramework instalada
 
@@ -240,9 +239,10 @@ Una vez en el directorio con el último número de versión, ejecute el comando:
 * .\MSBuild.exe -version
 
 El comando anterior generará la última versión instalada en el siguiente formato:
-* C:\Windows\Microsoft.NET\Framework\v4.0.30319>.\MSBuild.exe -version
+* _C:\Windows\Microsoft.NET\Framework\v4.0.30319>.\MSBuild.exe -version_
 
 Cuando se ingresa el comando, aparecerá la siguiente información:
+
     Microsoft (R) Build Engine versión 4.6.1038.0
     [Microsoft .NET Framework, versión 4.0.30319.42000]
     Derechos de autor (C) Microsoft Corporation. Todos los derechos reservados.
