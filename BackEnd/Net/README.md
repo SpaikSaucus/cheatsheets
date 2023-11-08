@@ -4,6 +4,7 @@
 
 ## Table of Contents
 - [NET 500.19 URLHandler error](#net-50019-urlhandler-error)
+- [Dispose GC (Garbage Collector)](#dispose-gc-garbage-collector)
 - [Execute exe from C# with CMD.exe](#execute-exe-from-c-with-cmdexe)
 - [Remove BOM](#remove-bom)
 - [Convert Selection Multiple to integer value](#convert-selection-multiple-to-integer-value)
@@ -11,7 +12,9 @@
 - [MSBUILD Execute](#msbuild-execute)
 - [Check installed .Net Framework version](#check-installed-net-framework-version)
 - [WCF Check if the service is up](#wcf-check-if-the-service-is-up)
-
+- [Group Linq Example](#group-linq-example)
+- [Catch LINQ query](#catch-linq-query)
+- [Catch Exception from CLR layer](#catch-exception-from-clr-layer)
 
 ## NET 500.19 URLHandler error
 
@@ -48,6 +51,79 @@ In the roles section choose:
     * Under Application Development choose .NET Extensibility 4.5, ASP.NET 4.5 and both ISAPI entries
     * In the features section choose: NET 3.5, .NET 4.5, ASP.NET 4.5
     * In the web server section choose: Web Server (all), Management Tools (IIS Management Console and Management Service), Windows Authentication - if you are using any of it.
+
+
+## Dispose GC (Garbage Collector)
+
+```csharp
+using System;
+
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		Console.WriteLine("Init Program");
+
+		using (var claseA = new A())
+		{
+			//Here we will see that the Dispose will not be done at the end of the entire class B program 
+			// since it is not inside a using.
+			var claseB = new B();
+
+			using (var claseAuxHija = new AuxHija())
+			{
+				//Here we will see that the AuxBase Class is disposed of, which is the class that is inherited 
+				// in the AuxHija class; import that the using was not done with the AuxBase Class.
+			}
+
+			Console.WriteLine("End Program");
+		}
+
+		Console.ReadKey();
+	}
+}
+
+public class A : IDisposable
+{
+	public string MiNombre
+	{
+		get { return "I am Class A"; }
+	}
+	public void Dispose()
+	{
+		Console.WriteLine(MiNombre + " I was made Dispose");
+		GC.SuppressFinalize(this);
+	}
+}
+
+public class B : IDisposable
+{
+	public string MiNombre
+	{
+		get { return "I am Class B"; }
+	}
+	public void Dispose()
+	{
+		Console.WriteLine(MiNombre + " I was made Dispose");
+		GC.SuppressFinalize(this);
+	}
+}
+
+public class AuxBase : IDisposable
+{
+	public string MiNombre
+	{
+		get { return "I am Class AuxBase"; }
+	}
+	public void Dispose()
+	{
+		Console.WriteLine(MiNombre + " I was made Dispose");
+		GC.SuppressFinalize(this);
+	}
+}
+
+public class AuxHija : AuxBase {}
+```
 
 
 ## Execute exe from C# with CMD.exe
@@ -145,6 +221,8 @@ public class Program
 		foreach(var loginT in result2) {
 			Console.WriteLine(loginT.ToString());
 		}
+
+		Console.ReadKey();
 	}
 
 	public static int ConvertListEnumToIntWithBinary<T>(List<T> listEnum)
@@ -208,6 +286,8 @@ public class Program
 			else
 				Console.WriteLine(number + " is integer.");
 		}
+
+		Console.ReadKey();
 	}
 }
 ```
@@ -266,3 +346,89 @@ catch (Exception ex)
 	isServiceUp = false;
 } 
 ```
+
+
+## Group Linq Example
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var lst = new List<EmployeeData>();
+
+        lst.Add(new EmployeeData() {
+            Code = 1,
+            Email = "employee1@company.com",
+            Data = "Error without permissions"
+        });
+        lst.Add(new EmployeeData()
+        {
+            Code = 1,
+            Email = "employee1@company.com",
+            Data = "Absence 1 May"
+        });
+        lst.Add(new EmployeeData()
+        {
+            Code = 2,
+            Email = "employee2@company.com",
+            Data = "In training"
+        });
+
+        var results = lst.GroupBy(
+            p => new { p.Code, p.Email },
+            p => p.Data,
+            (key, g) => new
+            {
+                Code = key.Code,
+                Email = key.Email,
+                Data = String.Join("/t ", g.Distinct())
+            }
+        );
+
+        foreach(var result in results){
+            Console.WriteLine(result.Code);
+            Console.WriteLine(result.Email);
+            Console.WriteLine(result.Data);
+            Console.WriteLine();
+        }
+        Console.ReadKey();
+    }
+}
+
+public class EmployeeData
+{
+    public uint Code { get; set; }
+    public string Email { get; set; }
+    public string Data { get; set; }
+}
+
+```
+
+
+## Catch LINQ query
+
+```csharp
+using System.Linq;
+using System.Data.Objects;
+
+using (efEntities context = new efEntities())
+{
+	var query = (from p in context.pais
+				select p);
+	var objectQuery = query as ObjectQuery;
+	string sqlQuery = objectQuery.ToTraceString();
+}
+```
+
+
+## Catch Exception from CLR layer
+
+There are times that exceptions arise within a DLL that is not accessible, so the exceptions cannot be seen since they arise in another instance of the code. To be able to see the exact place where the exception arises. We must add to the IDE, which shows these exceptions.
+
+Debug :arrow_right: Exceptions :arrow_right: Tick Thrown in Common Language Runtime Exceptions

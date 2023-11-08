@@ -4,6 +4,7 @@
 
 ## Tabla de Contenido
 - [NET 500.19 URLHandler error](#net-50019-urlhandler-error)
+- [Dispose GC (Garbage Collector)](#dispose-gc-garbage-collector)
 - [Ejecutar exe desde C# con CMD.exe](#ejecutar-exe-desde-c-con-cmdexe)
 - [Remover BOM](#remover-bom)
 - [Convertir Selección Multiple a un valor entero](#convertir-selección-multiple-a-un-valor-entero)
@@ -11,6 +12,9 @@
 - [MSBUILD Execute](#msbuild-execute)
 - [Verificar versión .NetFramework instalada](#verificar-versión-netframework-instalada)
 - [WCF Chequear si esta levantado el servicio](#wcf-chequear-si-esta-levantado-el-servicio)
+- [Group Linq Ejemplo](#group-linq-ejemplo)
+- [Capturar LINQ query](#capturar-linq-query)
+- [Capturar Exception de la capa de CLR](#capturar-exception-de-la-capa-de-clr)
 
 
 ## NET 500.19 URLHandler error
@@ -49,6 +53,79 @@ En la sección de roles, elija:
     * En Desarrollo de aplicaciones, elija: .NET Extensibility 4.5, ASP.NET 4.5 y ambas entradas ISAPI
     * En la sección de características, elija: NET 3.5, .NET 4.5, ASP.NET 4.5
     * En la sección del servidor web, seleccione: Servidor web (todo), Herramientas de administración (Consola de administración IIS y Servicio de administración), Autenticación de Windows - si está utilizando alguno de ellos.
+
+
+## Dispose GC (Garbage Collector)
+
+```csharp
+using System;
+
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		Console.WriteLine("Init Program");
+
+		using (var claseA = new A())
+		{
+			//Aquí veremos que no se hará el dispose al final de todo el programa de la clase B
+			// ya que no se encuentra dentro de un using.
+			var claseB = new B();
+
+			using (var claseAuxHija = new AuxHija())
+			{
+				//Aquí veremos que se hace el dispose de Clase AuxBase, que es la clase que se heredada en clase AuxHija;
+				// sim importar que no se hizo el using con la Clase AuxBase.
+			}
+
+			Console.WriteLine("End Program");
+		}
+
+		Console.ReadKey();
+	}
+}
+
+public class A : IDisposable
+{
+	public string MiNombre
+	{
+		get { return "I am Class A"; }
+	}
+	public void Dispose()
+	{
+		Console.WriteLine(MiNombre + " I was made Dispose");
+		GC.SuppressFinalize(this);
+	}
+}
+
+public class B : IDisposable
+{
+	public string MiNombre
+	{
+		get { return "I am Class B"; }
+	}
+	public void Dispose()
+	{
+		Console.WriteLine(MiNombre + " I was made Dispose");
+		GC.SuppressFinalize(this);
+	}
+}
+
+public class AuxBase : IDisposable
+{
+	public string MiNombre
+	{
+		get { return "I am Class AuxBase"; }
+	}
+	public void Dispose()
+	{
+		Console.WriteLine(MiNombre + " I was made Dispose");
+		GC.SuppressFinalize(this);
+	}
+}
+
+public class AuxHija : AuxBase {}
+```
 
 
 ## Ejecutar exe desde C# con CMD.exe
@@ -146,6 +223,8 @@ public class Program
 		foreach(var loginT in result2) {
 			Console.WriteLine(loginT.ToString());
 		}
+
+		Console.ReadKey();
 	}
 	
 	public static int ConvertListEnumToIntWithBinary<T>(List<T> listEnum)
@@ -209,6 +288,8 @@ public class Program
 			else
 				Console.WriteLine(number + " es entero.");
 		}
+
+		Console.ReadKey();
 	}
 }
 ```
@@ -266,3 +347,89 @@ catch (Exception ex)
 	isServiceUp = false;
 } 
 ```
+
+
+## Group Linq ejemplo
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var lst = new List<EmployeeData>();
+
+        lst.Add(new EmployeeData() {
+            Code = 1,
+            Email = "employee1@company.com",
+            Data = "Error without permissions"
+        });
+        lst.Add(new EmployeeData()
+        {
+            Code = 1,
+            Email = "employee1@company.com",
+            Data = "Absence 1 May"
+        });
+        lst.Add(new EmployeeData()
+        {
+            Code = 2,
+            Email = "employee2@company.com",
+            Data = "In training"
+        });
+
+        var results = lst.GroupBy(
+            p => new { p.Code, p.Email },
+            p => p.Data,
+            (key, g) => new
+            {
+                Code = key.Code,
+                Email = key.Email,
+                Data = String.Join("/t ", g.Distinct())
+            }
+        );
+
+        foreach(var result in results){
+            Console.WriteLine(result.Code);
+            Console.WriteLine(result.Email);
+            Console.WriteLine(result.Data);
+            Console.WriteLine();
+        }
+        Console.ReadKey();
+    }
+}
+
+public class EmployeeData
+{
+    public uint Code { get; set; }
+    public string Email { get; set; }
+    public string Data { get; set; }
+}
+
+```
+
+
+## Capturar LINQ query
+
+```csharp
+using System.Linq;
+using System.Data.Objects;
+
+using (efEntities context = new efEntities())
+{
+	var query = (from p in context.pais
+				select p);
+	var objectQuery = query as ObjectQuery;
+	string sqlQuery = objectQuery.ToTraceString();
+}
+```
+
+
+## Capturar Exception de la capa de CLR
+
+Hay veces que las excepciones surgen dentro de una DLL que no es accesible, por lo que no se pude ver la excepcione ya que surgen en otra instancia del código. Para poder ver el lugar exacto donde surge la excepción. Debemos agregar al IDE, que muestre estas excepciones.
+
+Debug :arrow_right: Exceptions :arrow_right: Tildar Thrown en Common Language Runtime Exceptions
