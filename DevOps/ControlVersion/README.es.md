@@ -19,7 +19,7 @@
 __Es ideal para organizaciones que necesitan simplicidad e implementación frecuente.__ 
 Cada trabajo, ya sea una corrección de errores o una característica, se realiza a través de una rama que se crea desde master. Una vez completado el trabajo en la rama, se revisa y prueba antes de fusionarlo con la rama master y enviarlo a producción.
 
-<img style="background-color:white;" src='https://github.com/SpaikSaucus/cheatsheets/blob/main/DevOps/ControlVersion/git-branching-strategies--github-flow.png?raw=true' />
+<img style="background-color:white !important;" src='https://github.com/SpaikSaucus/cheatsheets/blob/main/DevOps/ControlVersion/git-branching-strategies--github-flow.png?raw=true' />
 
 ### Git Flow
 __Es ideal para proyectos que tienen un ciclo de lanzamiento programado.__
