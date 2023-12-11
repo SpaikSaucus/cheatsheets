@@ -29,3 +29,4 @@ Documents that serve as help/summary on any technology
 - [Scraping](https://github.com/SpaikSaucus/cheatsheets/blob/main/Scraping/README.md)
 - [Server](https://github.com/SpaikSaucus/cheatsheets/blob/main/Server)
     - [AWS](https://github.com/SpaikSaucus/cheatsheets/blob/main/Server/AWS/README.md)
+- [Windows](https://github.com/SpaikSaucus/cheatsheets/blob/main/Windows/README.md)
